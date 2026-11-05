@@ -33,10 +33,10 @@ small{opacity:.7;font-size:.78em;padding:0 1em}
 <button id="bp">▶ Играть</button><button class="s" id="bs">🎨 Скины</button><button class="s" id="br">🏆 Рекорды</button><button class="s" id="bm">🔊 Звук: вкл</button>
 <small>← → или A D · на телефоне: касайся левой / правой половины экрана</small></div>
 <div class="ov" id="o"><h2>Игра окончена</h2><div class="big" id="os">0</div><div class="sub" id="ob"></div><div class="sub" id="oc"></div>
-<button id="oa">↻ Ещё раз</button><button class="s" id="om">Меню</button></div>
+<button id="oa">↻ Ещё раз</button><button class="s" id="om">Menu</button></div>
 <div class="ov" id="sk"><h2>🎨 Скины</h2><div class="sub" id="sc"></div><div class="grid" id="sg"></div><button class="s" id="sb">Назад</button></div>
 <div class="ov" id="rc"><h2>🏆 Лучшие результаты</h2><div id="rl"></div><button class="s" id="rb">Назад</button></div>
-<div class="ov" id="ps"><h2>Пауза</h2><button id="pc">▶ Продолжить</button><button class="s" id="pm">Меню</button></div>
+<div class="ov" id="ps"><h2>Пауза</h2><button id="pc">▶ Продолжить</button><button class="s" id="pm">Menu</button></div>
 </div>
 <script>
 let lastAdTime = 0;
@@ -58,7 +58,6 @@ function showVKAd(){
         }
     } catch(e) { console.log(e); }
 }
-
 (()=> {
 const cv=$('c'),c=cv.getContext('2d'),G=$('g');
 let W=400,H=640,K=1;
@@ -96,7 +95,7 @@ $('pz').onclick=()=>{if(st=='game'){st='pause';$('ps').classList.add('on')}};
 $('pc').onclick=()=>{st='game';$('ps').classList.remove('on')};
 $('pm').onclick=()=>{ $('ps').classList.remove('on');$('m').classList.add('on');st='menu';$('pz').style.display='none';uMenu()};
 $('bs').onclick=()=>{
-st='skins';$('m').classList.remove('on');$('sk').classList.add('on');
+    st='skins';$('m').classList.remove('on');$('sk').classList.add('on');
 $('sc').innerHTML=✨ Монеты: <b>${D.coins}</b>;
 let g=$('sg');g.innerHTML='';
 SK.forEach((s,i)=>{
@@ -124,9 +123,9 @@ uM();$('bm').onclick=()=>{ D.mute=D.mute?0:1;uM() };
 addEventListener('keydown',e=>{keys[e.code]=1;if(e.code=='Space'&&st=='over')$('oa').click()});
 addEventListener('keyup',e=>keys[e.code]=0);
 cv.addEventListener('touchstart',e=>{
-if(!e.touches || !e.touches[0]) return;
+if(!e.touches || !e.touches) return;
 let rect = cv.getBoundingClientRect();
-let x=(e.touches[0].clientX - rect.left) * (W / rect.width);
+let x=(e.touches.clientX - rect.left) * (W / rect.width);
 if(x<W/2)keys['KeyA']=1;else keys['KeyD']=1;
 e.preventDefault();
 }, {passive:false});
