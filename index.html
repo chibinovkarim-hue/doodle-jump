@@ -96,7 +96,7 @@ $('pc').onclick=()=>{st='game';$('ps').classList.remove('on')};
 $('pm').onclick=()=>{ $('ps').classList.remove('on');$('m').classList.add('on');st='menu';$('pz').style.display='none';uMenu()};
 $('bs').onclick=()=>{
     st='skins';$('m').classList.remove('on');$('sk').classList.add('on');
-    $('sc').innerHTML=`✨ Монеты: <b>${D.coins}</b>`;
+$('sc').innerHTML=✨ Монеты: <b>${D.coins}</b>;
 let g=$('sg');g.innerHTML='';
 SK.forEach((s,i)=>{
 let o=D.own.includes(i),sel=D.skin==i,c=document.createElement('div');
@@ -160,7 +160,7 @@ en.forEach(e=>{
 e.x+=e.vx;if(e.x<20||e.x>W-20)e.vx=-1;e.p+=0.1;
 if(hit(P,18,12,20,e,20)){if(P.vy>0&&P.y<e.y-10){en=en.filter(l=>l!=e);P.vy=-15;D.coins+=5;save();sfx(450,.2,'sawtooth')}else over()}
 });
-while(pl.length&&pl[0].y>cam+H+40){pl.shift();spawn(pl[pl.length-1].y-(65+R()35))}
+while(pl.length&&pl.y>cam+H+40){pl.shift();spawn(pl[pl.length-1].y-(65+R()35))}
 it=it.filter(i=>i.y<cam+H+20);en=en.filter(e=>e.y<cam+H+20);
 }
 c.clearRect(0,0,cv.width,cv.height);c.save();c.scale(K,K);c.translate(0,-cam);
