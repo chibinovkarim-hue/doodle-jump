@@ -43,7 +43,7 @@ small{opacity:.7;font-size:.78em;padding:0 1em}
 </div>
 <script>
 let lastAdTime = 0;
-if(typeof vkBridge!=='undefined'){
+if(typeof vkBridge !== 'undefined'){
     vkBridge.send('VKWebAppInit')
     .then(()=>{
         vkBridge.send('VKWebAppShowBannerAd',{banner_location:'top'}).catch(e=>console.log(e));
@@ -51,19 +51,18 @@ if(typeof vkBridge!=='undefined'){
 }
 function showVKAd(){
     const now = Date.now();
-    if(typeof vkBridge!=='undefined'&&(now-lastAdTime>20000)){
-        lastAdTime=now;
+    if(typeof vkBridge !== 'undefined' && (now-lastAdTime > 20000)){
+        lastAdTime = now;
         vkBridge.send('VKWebAppShowNativeAds',{ad_format:'interstitial'}).catch(err=>console.log(err));
     }
 }
-(()=>{
+(()=> {
 const W=400,H=640,FO=28,$=i=>document.getElementById(i),R=Math.random;
 const cv=$('c'),c=cv.getContext('2d'),G=$('g');let K=1;
 function fit(){const d=Math.min(devicePixelRatio||1,2),s=Math.min(innerWidth/W,innerHeight/H);G.style.width=W*s+'px';G.style.height=H*s+'px';G.style.fontSize=16*s+'px';cv.width=Math.round(W*s*d);cv.height=Math.round(H*s*d);K=cv.width/W}
 addEventListener('resize',fit);fit();
 let D={best:0,coins:0,hs:[],own:[0],skin:0,mute:0};
-// ЗАЩИТА ОТ ЗАВИСАНИЯ: Если localStorage заблокирован платформой ВК, игра просто пойдет дальше
-try{Object.assign(D,JSON.parse(localStorage.getItem('skyhop')||'{}'))}catch(e){console.log('Запись заблокирована CORS, используем память сессии');}
+try{Object.assign(D,JSON.parse(localStorage.getItem('skyhop')||'{}'))}catch(e){console.log('Память заблокирована');}
 const save=()=>{try{localStorage.setItem('skyhop',JSON.stringify(D))}catch(e){}};
 const SK=[{n:'Лягушонок',a:'#9be85a',b:'#3fa535',p:0},{n:'Котик',a:'#ffb35c',b:'#e0782b',p:50},{n:'Чертёнок',a:'#ff7a7a',b:'#c22b3a',p:120},{n:'Король',a:'#ffe066',b:'#e0a312',p:250},{n:'Пришелец',a:'#a8ecff',b:'#3a8fd6',p:400},{n:'Ниндзя',a:'#59607c',b:'#1c1f2e',p:600},{n:'Единорог',a:'#ffd0f0',b:'#d46bd0',p:900}];
 let AC;function sfx(f,d=.1,ty='sine',v=.07,sl=0){if(D.mute)return;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),g=AC.createGain(),n=AC.currentTime;o.type=ty;o.frequency.setValueAtTime(f,n);if(sl)o.frequency.exponentialRampToValueAtTime(f*sl,n+d);g.gain.setValueAtTime(v,n);g.gain.exponentialRampToValueAtTime(.001,n+d);o.connect(g);g.connect(AC.destination);o.start();o.stop(n+d)}catch(e){}
@@ -111,7 +110,12 @@ let bM=D.mute;const uM=()=>{ $('bm').innerText=D.mute?'🔇 Звук: выкл':
 uM();$('bm').onclick=()=>{ D.mute=D.mute?0:1;uM() };
 addEventListener('keydown',e=>{keys[e.code]=1;if(e.code=='Space'&&st=='over')$('oa').click()});
 addEventListener('keyup',e=>keys[e.code]=0);
-cv.addEventListener('touchstart',e=>{let x=e.touches[clientX]/K/parseFloat(G.style.width)W;if(x<W/2)keys['KeyA']=1;else keys['KeyD']=1;e.preventDefault()}, {passive:false});
+cv.addEventListener('touchstart',e=>{
+if(!e.touches || !e.touches[0]) return;
+let x=e.touches[0].clientX/K/parseFloat(G.style.width)W;
+if(x<W/2)keys['KeyA']=1;else keys['KeyD']=1;
+e.preventDefault();
+}, {passive:false});
 cv.addEventListener('touchend',e=>{keys['KeyA']=0;keys['KeyD']=0});
 const hit=(a,b,w,h,q,w2)=>a.x+w>q.x-w2&&a.x-w<q.x+w2&&a.y+h>q.y-10&&a.y-5<q.y+10;
 function loop(){
@@ -165,7 +169,7 @@ else{c.fillStyle='#ffd23f';c.beginPath();c.arc(i.x,i.y,7,0,7);c.fill();c.fillSty
 pa.forEach(p=>{p.y+=p.v;p.l--;c.fillStyle=p.c;c.beginPath();c.arc(p.x,p.y,p.r(p.l/30),0,7);c.fill()});pa=pa.filter(p=>p.l>0);
 en.forEach(e=>{
 c.fillStyle=e.t?'#e17055':'#d63031';rr(c,e.x-20,e.y-15,40,26,10);c.fill();
-c.fillStyle='#fff';c.beginPath();c.arc(e.x-8+Math.sin(e.p)*2,e.y-4,5,0,7);c.arc(e.x+8+Math.sin(e.p)*2,e.y-4,5,0,7);fill();
+c.fillStyle='#fff';c.beginPath();c.arc(e.x-8+Math.sin(e.p)*2,e.y-4,5,0,7);c.arc(e.x+8+Math.sin(e.p)*2,e.y-4,5,0,7);c.fill();
 c.fillStyle='#000';c.beginPath();c.arc(e.x-8+Math.sin(e.p)*3,e.y-4,2,0,7);c.arc(e.x+8+Math.sin(e.p)*3,e.y-4,2,0,7);c.fill();
 });
 if(st=='game'||st=='over'||st=='pause'){
