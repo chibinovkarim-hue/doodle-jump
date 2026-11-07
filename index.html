@@ -43,9 +43,11 @@ small{opacity:.7;font-size:.78em;padding:0 1em}
 <div class="ov" id="ps"><h2>Пауза</h2><button id="pc">▶ Продолжить</button><button class="s" id="pm">Меню</button></div>
 </div>
 <script>
-(()=>{"use strict";
+(()=>{
 // ИНИЦИАЛИЗАЦИЯ VK BRIDGE
-if(typeof vkBridge !== 'undefined'){vkBridge.send('VKWebAppInit').catch(e=>console.log(e));}
+if(typeof vkBridge !== 'undefined'){
+    vkBridge.send('VKWebAppInit').catch(e=>console.log(e));
+}
 
 const W=400,H=640,FO=28,$=i=>document.getElementById(i),R=Math.random;
 const cv=$('c'),c=cv.getContext('2d'),G=$('g');let K=1;
@@ -69,7 +71,7 @@ if(k==3){x.fillStyle='#ffd23f';x.beginPath();x.moveTo(-14,-21);x.lineTo(-16,-36)
 if(k==4){x.strokeStyle=s.b;x.lineWidth=2.5;x.beginPath();x.moveTo(0,-22);x.lineTo(5,-36);x.stroke();x.fillStyle='#ff4fa3';x.beginPath();x.arc(5,-37,4,0,7);x.fill()}
 if(k==5){x.fillStyle='#e63946';rr(x,-20,-17,40,6,2);x.fill();x.beginPath();x.moveTo(-f*20,-14);x.lineTo(-f*32,-20);x.lineTo(-f*30,-8);x.fill()}
 if(k==6){const hg=x.createLinearGradient(0,-40,0,-22);hg.addColorStop(0,'#fff');hg.addColorStop(1,'#ffd23f');x.fillStyle=hg;x.beginPath();x.moveTo(-5,-22);x.lineTo(0,-42);x.lineTo(5,-22);x.fill()}
-x.fillStyle=s.a;x.strokeStyle='rgba(0,0,0,.18)';x.lineWidth=1.5;x.beginPath();x.ellipse(f*17,0,9,6.5,0,0,7);x.fill();x.stroke();x.fillStyle='rgba(0,0,0,.4)';x.beginPath();x.arc(f*20,-1,1.4,0,7);x.arc(f*15,-1,1.4,0,7);x.fill();
+x.fillStyle=s.a;x.strokeStyle='rgba(0,0,0,.18)';x.lineWidth=1.5;x.beginPath();x.ellipse(f*17,0,9,6.5,0,0,7);x.fill();stroke();x.fillStyle='rgba(0,0,0,.4)';x.beginPath();x.arc(f*20,-1,1.4,0,7);x.arc(f*15,-1,1.4,0,7);x.fill();
 for(const e of[-7,7]){x.fillStyle='#fff';x.beginPath();x.arc(f*3+e,-9,6.5,0,7);x.fill();x.fillStyle='#1b2038';x.beginPath();x.arc(f*5.5+e,-8,3.2,0,7);x.fill();x.fillStyle='#fff';x.beginPath();x.arc(f*6.5+e,-9.5,1,0,7);x.fill()}
 x.restore()}
 function dJet(x,y,f){x.save();x.translate(x_=y?0:0,0);x.restore()}
@@ -117,8 +119,11 @@ gen();pl=pl.filter(p=>!p.gone&&p.y<cam+H+80);it=it.filter(o=>!o.gone&&o.y<cam+H+
 if(P.y>cam+H+90)over()}
 function over(){st='over';const nb=score>D.best;if(nb)D.best=score;D.coins+=gc;if(score>0){D.hs.push({s:score,d:new Date().toLocaleDateString('ru-RU')});D.hs.sort((a,b)=>b.s-a.s);D.hs.length=Math.min(D.hs.length,5)}save();
 $('os').textContent=score;$('ob').textContent=nb&&score>0?'🎉 Новый рекорд!':'Рекорд: '+D.best;$('oc').textContent='🪙 +'+gc+'  (всего '+D.coins+')';show('o');sfx(nb?700:200,.5,'triangle',.09,nb?2:.5);
-// ВЫЗОВ МЕЖСТРАНИЧНОЙ РЕКЛАМЫ ВК ПРИ СМЕРТИ
-if(typeof vkBridge !== 'undefined'){vkBridge.send('VKWebAppShowNativeAds',{ad_format:'interstitial'}).catch(e=>console.log(e))}
+// ВЫЗОВ ПОЛНОЭКРАННОЙ РЕКЛАМЫ (INTERSTITIAL) ПРИ СМЕРТИ ИГРОКА
+if(typeof vkBridge !== 'undefined'){
+vkBridge.send('VKWebAppShowNativeAds', {ad_format: 'interstitial'})
+.catch(e => console.log('Ошибка вызова рекламы:', e));
+}
 }
 // ---------- отрисовка ----------
 function bg(h){const f=Math.min(3,h/6000),i=Math.min(2,Math.floor(f)),q=f-i,m=(a,b)=>a.map((v,j)=>v+(b[j]-v)q|0);
@@ -128,10 +133,10 @@ if(sp>0){c.fillStyle='#fff';for(const s of ST){c.globalAlpha=sp(.4+.6Math.abs(Ma
 c.globalAlpha=sp;const pg=c.createRadialGradient(70,130,5,80,140,45);pg.addColorStop(0,'#ffb3e6');pg.addColorStop(1,'#6a3fb8');c.fillStyle=pg;c.beginPath();c.arc(80,140,38,0,7);c.fill();c.strokeStyle='rgba(255,230,255,.7)';c.lineWidth=4;c.beginPath();c.ellipse(80,140,62,13,-.4,0,7);c.stroke()}
 if(sp<1){c.globalAlpha=(1-sp).9;const sy=100+Math.min(h.01,260),sg=c.createRadialGradient(320,sy,5,320,sy,90);sg.addColorStop(0,'rgba(255,250,200,1)');sg.addColorStop(.25,'rgba(255,230,140,.8)');sg.addColorStop(1,'rgba(255,200,100,0)');c.fillStyle=sg;c.fillRect(200,sy-110,200,220)}
 c.fillStyle='rgba(255,255,255,'+.85*(1-sp)+')';c.globalAlpha=1;
-for(const cl of CL){const x=(cl.x+tcl.v)%(W+200)-100,y=((cl.y-cam.25)%(H+160)+H+160)%(H+160)-80,s=cl.s;c.beginPath();for(const[a, b, r]of[[0, 0, 26, -28, 8, 18, 8, 20, -10, -12, 20, 14, -10, 18]){c.moveTo(x+(a+r)s,y+bs);c.arc(x+as,y+bs,rs,0,7)}c.fill()}}
+for(const cl of CL){const x=(cl.x+tcl.v)%(W+200)-100,y=((cl.y-cam.25)%(H+160)+H+160)%(H+160)-80,s=cl.s;c.beginPath();for(const[a,b,r]of[[0,0,26],[-28,8,18],[28,8,20],[-10,-12,20],[14,-10,18]]){c.moveTo(x+(a+r)s,y+bs);c.arc(x+as,y+bs,rs,0,7)}c.fill()}}
 function ground(){if(cam+H<570)return;const g=c.createLinearGradient(0,590,0,780);g.addColorStop(0,'#69dc5c');g.addColorStop(1,'#2a7d34');c.fillStyle=g;c.beginPath();c.moveTo(0,900);for(let x=0;x<=W;x+=10)c.lineTo(x,606+Math.sin(x.02)12+Math.sin(x.07)4);c.lineTo(W,900);c.fill()}
 function dPl(p){const x=p.x-p.w/2,y=p.y,w=p.w,C=PC[p.t];c.globalAlpha=p.a;
-rr(c,x,y+5,w,13,7);c.fillStyle=C[2];c.fill();rr(c,x,y,w,13,7);const g=c.createLinearGradient(0,y,0,y+13);g.addColorStop(0,C[0]);g.addColorStop(1,C[1]);c.fillStyle=g;fill();
+rr(c,x,y+5,w,13,7);c.fillStyle=C[2];c.fill();rr(c,x,y,w,13,7);const g=c.createLinearGradient(0,y,0,y+13);g.addColorStop(0,C[0]);g.addColorStop(1,C[1]);c.fillStyle=g;c.fill();
 c.fillStyle='rgba(255,255,255,.4)';rr(c,x+5,y+2,w-10,3,2);c.fill();
 if(p.t==0){c.fillStyle='#62d654';for(let i=0;i<4;i++){const gx=x+9+i(w-18)/3;c.beginPath();c.moveTo(gx-3,y+1);c.lineTo(gx,y-5);c.lineTo(gx+3,y+1);c.fill()}}
 if(p.t==1){c.fillStyle='rgba(255,255,255,.8)';for(const s of[-1,1]){const gx=p.x+s*(w/2-11);c.beginPath();c.moveTo(gx+s5,y+6.5);c.lineTo(gx-s1,y+2.5);c.lineTo(gx-s1,y+10.5);c.fill()}}
