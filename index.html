@@ -41,7 +41,8 @@ small{opacity:.7;font-size:.78em;padding:0 1em}
 <div class="ov" id="ps"><h2>Пауза</h2><button id="pc">▶ Продолжить</button><button class="s" id="pm">Меню</button></div>
 </div>
  
-<!-- ВСТАВЬ СЮДА КОД РЕКЛАМЫ. Баннер делай отдельным блоком с position:fixed (например, внизу), не внутри #g. -->
+<!-- VK Bridge (реклама и API VK Игр) -->
+<script src="https://cdn.jsdelivr.net/npm/@vkontakte/vk-bridge/dist/browser.min.js"></script>
  
 <script>
 (()=>{
@@ -64,6 +65,33 @@ if(window.visualViewport)visualViewport.addEventListener('resize',fit);
 if(window.ResizeObserver)new ResizeObserver(fit).observe(document.documentElement);
 fit();
 [100,300,600,1200,2500].forEach(ms=>setTimeout(fit,ms));
+ 
+// ---------- VK Игры: инициализация и реклама ----------
+const VK=window.vkBridge;let games=0,lastAd=0;
+if(VK){
+  VK.send('VKWebAppInit').then(()=>{lastKey='';fit();setTimeout(fit,300)}).catch(()=>{});
+}
+// межстраничная реклама: после каждой 2-й смерти
+function showAd(){
+  if(!VK)return;
+  games++;
+  if(games%2!==0)return;
+  VK.send('VKWebAppCheckNativeAds',{ad_format:'interstitial'}).then(r=>{
+    if(!r||!r.result)return;
+    lastAd=Date.now();
+    return VK.send('VKWebAppShowNativeAds',{ad_format:'interstitial'});
+  }).catch(()=>{});
+}
+// баннер: каждые 60 секунд с шансом 50% появляется внизу на 10 секунд
+let bannerOn=false;
+setInterval(()=>{
+  if(!VK||bannerOn||Math.random()>=.5)return;
+  VK.send('VKWebAppShowBannerAd',{banner_location:'bottom'}).then(r=>{
+    if(!r||!r.result)return;
+    bannerOn=true;
+    setTimeout(()=>{VK.send('VKWebAppHideBannerAd').catch(()=>{});bannerOn=false},10000);
+  }).catch(()=>{});
+},60000);
  
 let D={best:0,coins:0,hs:[],own:[0],skin:0,mute:0};
 try{Object.assign(D,JSON.parse(localStorage.getItem('skyhop')||'{}'))}catch(e){}
@@ -129,7 +157,7 @@ if(!P.dead){hm=Math.max(hm,530-P.y);score=Math.floor(hm/10)}
 gen();pl=pl.filter(p=>!p.gone&&p.y<cam+H+80);it=it.filter(o=>!o.gone&&o.y<cam+H+80);en=en.filter(e=>!e.dead&&e.y<cam+H+80);
 if(P.y>cam+H+90)over()}
 function over(){st='over';const nb=score>D.best;if(nb)D.best=score;D.coins+=gc;if(score>0){D.hs.push({s:score,d:new Date().toLocaleDateString('ru-RU')});D.hs.sort((a,b)=>b.s-a.s);D.hs.length=Math.min(D.hs.length,5)}save();
-$('os').textContent=score;$('ob').textContent=nb&&score>0?'🎉 Новый рекорд!':'Рекорд: '+D.best;$('oc').textContent='🪙 +'+gc+'  (всего '+D.coins+')';show('o');sfx(nb?700:200,.5,'triangle',.09,nb?2:.5)}
+$('os').textContent=score;$('ob').textContent=nb&&score>0?'🎉 Новый рекорд!':'Рекорд: '+D.best;$('oc').textContent='🪙 +'+gc+'  (всего '+D.coins+')';show('o');sfx(nb?700:200,.5,'triangle',.09,nb?2:.5);setTimeout(showAd,700)}
 // ---------- отрисовка ----------
 function bg(h){const f=Math.min(3,h/6000),i=Math.min(2,Math.floor(f)),q=f-i,m=(a,b)=>a.map((v,j)=>v+(b[j]-v)*q|0);
 const A=m(PAL[i][0],PAL[i+1][0]),B=m(PAL[i][1],PAL[i+1][1]),g=c.createLinearGradient(0,0,0,H);g.addColorStop(0,`rgb(${A})`);g.addColorStop(1,`rgb(${B})`);c.fillStyle=g;c.fillRect(0,0,W,H);
